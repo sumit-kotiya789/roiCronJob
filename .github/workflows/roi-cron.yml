@@ -1,8 +1,7 @@
 name: Daily ROI Processor
-
 on:
   schedule:
-    - cron: '* * * * *'  # Runs at midnight UTC daily
+    - cron: '* * * * *'  # Runs every minute
   workflow_dispatch:     # Allows manual triggering
 
 jobs:
@@ -16,25 +15,25 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.1'  # Changed to PHP 8.1
+        php-version: '8.1'
         extensions: mysqli
         tools: composer
         
     - name: Run ROI Script
       run: |
-        php cron/daily_roi_cron.php
+        cd roiCronJob && php roi_income_release.php
       env:
-        DB_HOST: "localhost"  # Hardcoded value
-        DB_USER: "root"       # Hardcoded value
-        DB_PASS: ""       # Hardcoded value
-        DB_NAME: "u255754182_eightcap"           # Hardcoded value
+        DB_HOST: "localhost"
+        DB_USER: "root"
+        DB_PASS: ""
+        DB_NAME: "u255754182_eightcap"
         APP_ENV: production
         
     - name: Archive error logs
       if: always()
-      uses: actions/upload-artifact@v4 
+      uses: actions/upload-artifact@v4
       with:
         name: cron-logs
         path: |
-          cron_errors.log
-          cron.log
+          roiCronJob/cron_errors.log
+          roiCronJob/cron.log
