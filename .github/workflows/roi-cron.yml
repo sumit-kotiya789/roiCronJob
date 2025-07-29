@@ -2,7 +2,7 @@ name: Daily ROI Processor
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs at midnight UTC daily
+    - cron: '* * * * *'  # Runs at midnight UTC daily
   workflow_dispatch:     # Allows manual triggering
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
         
     - name: Archive error logs
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4 
       with:
         name: cron-logs
         path: |
